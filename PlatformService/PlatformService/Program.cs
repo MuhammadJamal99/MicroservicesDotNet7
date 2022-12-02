@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PlatformService.Data;
+using PlatformService.Data.DataSeeds;
 using PlatformService.Services.PlatformRepository;
 
 namespace PlatformService;
@@ -14,8 +15,12 @@ public class Program
         builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseInMemoryDatabase("MemmoryDatabase")
         );
+        
         builder.Services.AddScoped<IPlatformRepository, PlatformRepository>();
+        
         builder.Services.AddControllers();
+
+        builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
@@ -36,6 +41,9 @@ public class Program
 
         app.MapControllers();
 
+        DataSeeder.SeedsDataPopulation(app);
+
         app.Run();
+
     }
 }

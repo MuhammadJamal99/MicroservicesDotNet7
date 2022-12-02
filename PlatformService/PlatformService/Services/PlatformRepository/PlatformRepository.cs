@@ -12,20 +12,22 @@ public class PlatformRepository : IPlatformRepository
         Context = context; 
     }
 
-    public void CreatePlatform(Platform NewItem)
+    public bool CreatePlatform(Platform NewItem)
     {
         if (NewItem == null) throw new ArgumentNullException(nameof(NewItem));
         Context.Add(NewItem);
+        Context.SaveChanges();
+        return Context.Platforms.Any(o => o.Id == NewItem.Id);
     }
 
     public IEnumerable<Platform> GetList()
     {
-        return Context.Platform.ToList();
+        return Context.Platforms.ToList();
     }
 
     public Platform GetPlatformById(int id)
     {
-        return Context.Platform.FirstOrDefault(o => o.Id == id);
+        return Context.Platforms.FirstOrDefault(o => o.Id == id);
     }
 
     public bool SavaChanges()
